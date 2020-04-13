@@ -1,0 +1,89 @@
+Class {
+	#name : #SimulationTest,
+	#superclass : #TestCase,
+	#instVars : [
+		'log'
+	],
+	#category : #'DiscreteEvents-Tests'
+}
+
+{ #category : #'as yet unclassified' }
+SimulationTest >> log: port of: model [
+	log := EventDisplay new.
+	model forward: port to: log -> #receive:.
+	
+]
+
+{ #category : #'as yet unclassified' }
+SimulationTest >> newFallingBall [
+	| acceleration velocity position physics |
+	acceleration := SingleEvent new value: -9.8; instant: 0 devsSeconds.
+	velocity := QuantizedIntegrator named: 'accel to vel'.
+	position := QuantizedIntegrator named: 'vel to pos'.
+
+	physics := CoupledModel new
+							add: acceleration as: #acceleration;
+							add: velocity as: #velocity;
+							add: position as: #position.
+
+	acceleration forward: #output to: velocity -> #input:.
+	velocity forward: #output to: position -> #input:.
+	^physics
+]
+
+{ #category : #'as yet unclassified' }
+SimulationTest >> newRecorded: model [
+	| recorder coupling |
+	recorder := EventCollector new.
+	coupling := CoupledModel new add: model; add: recorder as: #recorder.
+	model forward: #output to: recorder -> #receive:.
+	^coupling
+]
+
+{ #category : #'as yet unclassified' }
+SimulationTest >> simulate: aModel for: aDuration [
+	| simulator |
+	simulator := Simulator on: aModel.
+	simulator runFor: aDuration.
+
+	
+]
+
+{ #category : #'as yet unclassified' }
+SimulationTest >> test010SimulatePeriodicEvents [
+	| coupled output |
+	coupled := self newRecorded: PeriodicEventGenerator new.
+	self simulate: coupled for: 3 devsSeconds.
+	output := (coupled >> #recorder) events collect: [ :event | event time -> event value ].
+	self assert: output asArray equals: { 1 devsSeconds -> 1. 2 devsSeconds -> 2. 3 devsSeconds -> 3 }
+	
+]
+
+{ #category : #'as yet unclassified' }
+SimulationTest >> test020SimulateRandomEvents [
+	| coupled |
+	coupled := self newRecorded: PeriodicEventGenerator new.
+	self simulate: coupled for: 3 devsSeconds.
+	(coupled >> #recorder) events pairsDo: [ :prev :next | self assert: prev value equals: next value - 1 ]
+	
+]
+
+{ #category : #'as yet unclassified' }
+SimulationTest >> test200FallingBall [
+	| ball log2 |
+	ball := FallingBall new.	
+		
+	ball	velocity initialC: 1; q: 1.
+	ball position initialC: 0; q: 0.2.
+	
+	log := EventDisplay new.
+	ball position forward: #output to: log as: #receive:.
+	
+	log2 := EventDisplay new.
+	ball velocity forward: #output to: log2 as: #receive:.
+
+	self simulate: ball physics for: 3 devsSeconds.
+	log buildChart2 inspect.
+	log2 buildChart2 inspect.
+
+]
