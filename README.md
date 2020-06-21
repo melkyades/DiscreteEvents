@@ -30,7 +30,7 @@ test200FallingBall
 	ball position initialC: 0; q: 0.2.
 	chart1 := EventDisplay new title: 'Position'; ylabel: 'm'.
 	ball position forward: #output to: chart1 as: #receive:.
-	chart2 := EventDisplay new title: 'Acceleration'; ylabel: 'm/s'.
+	chart2 := EventDisplay new title: 'Velocity'; ylabel: 'm/s'.
 	ball velocity forward: #output to: chart2 as: #receive:.
 	self simulate: ball physics for: 3 devsSeconds.
 	chart1 plot.
