@@ -15,8 +15,8 @@ then load this repo.
 repo := IceRepositoryCreator  new
 	url: 'git@github.com:melkyades/DiscreteEvents.git';
 	createRepository.
-```
 
 repo register.
 (repo packageNamed: 'DiscreteEvents') load.
+```
 
