@@ -22,5 +22,22 @@ repo register.
 
 # Examples
 
-![Position](docs/images/position.png?raw=true "Position") ![Acceleration](docs/images/acceleration.png?raw=true "Acceleration")
+```Smalltalk
+test200FallingBall
+	| ball chart1 chart2 |
+	ball := FallingBall new.
+	ball velocity initialC: 1; q: 1.
+	ball position initialC: 0; q: 0.2.
+	chart1 := EventDisplay new title: 'Position'; ylabel: 'm'.
+	ball position forward: #output to: chart1 as: #receive:.
+	chart2 := EventDisplay new title: 'Acceleration'; ylabel: 'm/s'.
+	ball velocity forward: #output to: chart2 as: #receive:.
+	self simulate: ball physics for: 3 devsSeconds.
+	chart1 plot.
+	chart2 plot
+```
+
+Position | Acceleration 
+:-------------------------:|:-------------------------:
+![Position](docs/images/position.png?raw=true "Position") |![Acceleration](docs/images/acceleration.png?raw=true "Acceleration")
 
