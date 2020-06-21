@@ -71,19 +71,18 @@ SimulationTest >> test020SimulateRandomEvents [
 { #category : #'as yet unclassified' }
 SimulationTest >> test200FallingBall [
 	| ball log2 |
-	ball := FallingBall new.	
-		
-	ball	velocity initialC: 1; q: 1.
-	ball position initialC: 0; q: 0.2.
-	
+	ball := FallingBall new.
+	ball velocity
+		initialC: 1;
+		q: 1.
+	ball position
+		initialC: 0;
+		q: 0.2.
 	log := EventDisplay new.
 	ball position forward: #output to: log as: #receive:.
-	
 	log2 := EventDisplay new.
 	ball velocity forward: #output to: log2 as: #receive:.
-
 	self simulate: ball physics for: 3 devsSeconds.
-	log buildChart2 inspect.
-	log2 buildChart2 inspect.
-
+	log buildChart .
+	log2 buildChart
 ]

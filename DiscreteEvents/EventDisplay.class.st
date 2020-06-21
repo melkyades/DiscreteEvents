@@ -14,24 +14,18 @@ EventDisplay >> addEvent: event [
 
 { #category : #'as yet unclassified' }
 EventDisplay >> buildChart [
-	| table b ds |
-
-	table := self eventTable.
-	b := RTGrapher new.
-	b extent: 400 @ 200.
-
-	ds := RTData new.
-	ds interaction fixedPopupText: [ :row | row value at: 1 ]. 
-	"ds dotShape ellipse 
-		color: (Color blue alpha: 0.3);
-		size: [ :row  | 5 ]."
-	ds points: table values.
-	ds connectColor: Color blue.
-	ds y: [ :row | row at: 2 ].
-	b add: ds. 
-	b axisXWithNumberOfTicks: table values size.
-	"b axisY noDecimals."
-	^b build.
+	| c times values plot |
+	times := events collect: [ :e | e time seconds ].
+	values := events collect: [ :e | e value ].
+	plot := RSLinePlot new x: times y: values.
+	c := RSChart new.
+	c
+		extent: 400 @ 200;
+		xlabel: 'seconds';
+		addDecoration: RSVerticalTick new;
+		addDecoration: RSHorizontalTick new;
+		addPlot: plot.
+	^ c open
 ]
 
 { #category : #'as yet unclassified' }
@@ -56,21 +50,10 @@ EventDisplay >> buildChart2 [
 ]
 
 { #category : #'as yet unclassified' }
-EventDisplay >> eventTable [
-	| result |
-	result := RTTabTable new input: 
-	'evento 1,20
-	evento2,30' usingDelimiter: $,.
-	result 	convertColumnsAsInteger: #(2).
-	^result
-
-]
-
-{ #category : #'as yet unclassified' }
 EventDisplay >> initialize [
 	events := OrderedCollection new.
 	super initialize.
-	self buildChart; sleep
+	self sleep
 ]
 
 { #category : #'as yet unclassified' }
