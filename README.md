@@ -20,3 +20,7 @@ repo register.
 (repo packageNamed: 'DiscreteEvents') load.
 ```
 
+# Examples
+
+![Position](docs/images/position.png?raw=true "Position") ![Acceleration](docs/images/acceleration.png?raw=true "Acceleration")
+
