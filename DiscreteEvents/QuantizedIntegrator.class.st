@@ -40,8 +40,8 @@ QuantizedIntegrator >> input: event [
 	| elapsed remaining nextTime |
 	"self haltIf: name = 'vel to pos'."
 	dx          := event value.
-	elapsed     := (event time - self lastChange) asSeconds.
-	accumulated := accumulated + (elapsed * dx).
+	elapsed     := (event time - self lastChange).
+	accumulated := accumulated + (elapsed seconds * dx).
 	remaining   := (q * dx sign) - accumulated.
 	nextTime    := dx = 0.0 
 								ifTrue: [DEVSTime infinity]
