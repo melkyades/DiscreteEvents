@@ -37,7 +37,7 @@ test200FallingBall
 	chart2 plot
 ```
 
-Position | Acceleration 
+Position | Velocity 
 :-------------------------:|:-------------------------:
-![Position](docs/images/position.png?raw=true "Position") |![Acceleration](docs/images/acceleration.png?raw=true "Acceleration")
+![Position](docs/images/position.png?raw=true "Position") |![Velocity](docs/images/velocity.png?raw=true "Velocity")
 
