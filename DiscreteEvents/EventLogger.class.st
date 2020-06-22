@@ -12,6 +12,6 @@ EventLogger >> initialize [
 
 { #category : #'as yet unclassified' }
 EventLogger >> receive: event [
-	Transcript show: event time printString, ' - event received: ', event value printString, String cr.
+	Transcript show: event time printString, ', ', event value printString, String cr.
 	self sleep
 ]
