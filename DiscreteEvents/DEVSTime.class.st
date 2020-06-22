@@ -169,11 +169,11 @@ DEVSTime >> printOn: aStream [
 	"Format as per ANSI 5.8.2.16: [-]D:HH:MM:SS[.S]"
 
 	| d h m s n |
+	self isInfinite
+		ifTrue: [ ^ aStream nextPutAll: 'infinity' ].
 	d := self days abs.
 	h := self hours abs.
 	m := self minutes abs.
-	self isInfinite
-		ifTrue: [ ^ aStream nextPutAll: 'infinity' ].
 	s := self secondsPart abs truncated.
 	n := self nanoSecondsPart abs.
 	self negative
