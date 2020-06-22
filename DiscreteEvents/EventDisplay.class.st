@@ -2,7 +2,8 @@ Class {
 	#name : #EventDisplay,
 	#superclass : #AtomicModel,
 	#instVars : [
-		'events'
+		'events',
+		'chart'
 	],
 	#category : #'DiscreteEvents-GUI'
 }
@@ -14,18 +15,12 @@ EventDisplay >> addEvent: event [
 
 { #category : #'as yet unclassified' }
 EventDisplay >> buildChart [
-	| c times values plot |
-	times := events collect: [ :e | e time seconds ].
-	values := events collect: [ :e | e value ].
-	plot := RSLinePlot new x: times y: values.
-	c := RSChart new.
-	c
+	chart := RSChart new.
+	chart
 		extent: 400 @ 200;
 		xlabel: 'seconds';
 		addDecoration: RSVerticalTick new;
-		addDecoration: RSHorizontalTick new;
-		addPlot: plot.
-	^ c open
+		addDecoration: RSHorizontalTick new
 ]
 
 { #category : #'as yet unclassified' }
@@ -53,11 +48,32 @@ EventDisplay >> buildChart2 [
 EventDisplay >> initialize [
 	events := OrderedCollection new.
 	super initialize.
-	self sleep
+	self buildChart; sleep
+]
+
+{ #category : #'as yet unclassified' }
+EventDisplay >> plot [
+	| times values plot |
+	times := events collect: [ :e | e time seconds ].
+	values := events collect: [ :e | e value ].
+	plot := RSLinePlot new x: times y: values.
+	chart addPlot: plot.
+	^ chart open
 ]
 
 { #category : #'as yet unclassified' }
 EventDisplay >> receive: event [
 	self addEvent: event.
 	self sleep
+]
+
+{ #category : #'as yet unclassified' }
+EventDisplay >> title: aString [
+	chart title: aString
+]
+
+{ #category : #'as yet unclassified' }
+EventDisplay >> ylabel: aString [
+	chart
+		ylabel: aString
 ]

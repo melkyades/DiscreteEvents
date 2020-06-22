@@ -9,7 +9,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 SimulationTest >> log: port of: model [
-	log := EventDisplay new.
+	log := EventLogger new.
 	model forward: port to: log -> #receive:.
 	
 ]
@@ -70,19 +70,15 @@ SimulationTest >> test020SimulateRandomEvents [
 
 { #category : #'as yet unclassified' }
 SimulationTest >> test200FallingBall [
-	| ball log2 |
+	| ball chart1 chart2 |
 	ball := FallingBall new.
-	ball velocity
-		initialC: 1;
-		q: 1.
-	ball position
-		initialC: 0;
-		q: 0.2.
-	log := EventDisplay new.
-	ball position forward: #output to: log as: #receive:.
-	log2 := EventDisplay new.
-	ball velocity forward: #output to: log2 as: #receive:.
-	self simulate: ball physics for: 3 devsSeconds.
-	log buildChart .
-	log2 buildChart
+	ball velocity 	initialC: 20; q: 1.
+	ball position initialC: 0; q: 0.1.
+	chart1 := EventDisplay new title: 'Position'; ylabel: 'm'.
+	ball position forward: #output to: chart1 as: #receive:.
+	chart2 := EventDisplay new title: 'Velocity'; ylabel: 'm/s'.
+	ball velocity forward: #output to: chart2 as: #receive:.
+	self simulate: ball physics for: 5 devsSeconds.
+	chart1 plot.
+	chart2 plot
 ]
