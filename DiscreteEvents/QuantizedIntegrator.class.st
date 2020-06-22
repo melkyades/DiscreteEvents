@@ -31,6 +31,7 @@ QuantizedIntegrator >> initialC: value [
 { #category : #'as yet unclassified' }
 QuantizedIntegrator >> initialize [
 	accumulated := 0.0.
+	dx := 0.
 	super initialize.
 	self sleep
 ]
@@ -38,16 +39,15 @@ QuantizedIntegrator >> initialize [
 { #category : #'as yet unclassified' }
 QuantizedIntegrator >> input: event [
 	| elapsed remaining nextTime |
-	"self haltIf: name = 'vel to pos'."
-	dx          := event value.
-	elapsed     := (event time - self lastChange).
-	accumulated := accumulated + (elapsed seconds * dx).
-	remaining   := (q * dx sign) - accumulated.
-	nextTime    := dx = 0.0 
-								ifTrue: [DEVSTime infinity]
-								ifFalse: [(remaining / dx) abs devsSeconds].
-	self hold: nextTime.
 
+	elapsed := event time - self lastChange.
+	accumulated := accumulated + (elapsed seconds * dx).
+	dx := event value.
+	remaining := q * dx sign - accumulated.
+	nextTime := dx isZero
+		ifTrue: [ DEVSTime infinity ]
+		ifFalse: [ (remaining / dx) abs devsSeconds ].
+	self hold: nextTime
 ]
 
 { #category : #'as yet unclassified' }
